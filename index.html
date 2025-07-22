@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Best AI Captioner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- In your <head> -->
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/10341/10341414.png" type="image/png">
+
     <style>
      :root {
     --primary: #C599B6;
@@ -25,7 +28,7 @@
         }
         
         body {
-    background-color: var(--background);
+    background-color: linear-gradient(to bottom right, #FFF7F3, #FCEFF1);
     color: var(--dark);
     line-height: 1.6;
     padding: 20px;
@@ -135,14 +138,24 @@
             gap: 8px;
         }
         
-        button:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-        }
+      button:hover {
+    background-color: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(197, 153, 182, 0.5);
+}
         
         button:active {
             transform: translateY(0);
         }
+        .result.fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
         
         .result-container {
             position: relative;
@@ -261,8 +274,8 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-robot"></i> Your Best AI Captioner</h1>
-            <p class="subtitle">Generate perfect social media captions in seconds</p>
+            <h1><i class="fas fa-robot"></i> CaptionMuse</h1>
+            <p class="subtitle">Generate smart social media captions in seconds</p>
         </header>
         
         <div class="app-body">
@@ -371,6 +384,12 @@
                 });
                 topicsGrid.appendChild(topicElement);
             });
+
+            const resultBox = document.querySelector('.result');
+resultBox.classList.remove('fade-in'); // Reset animation
+void resultBox.offsetWidth; // Reflow hack to restart animation
+resultBox.classList.add('fade-in');
+
             
             // Generate caption
             generateBtn.addEventListener('click', function() {
