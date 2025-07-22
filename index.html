@@ -57,10 +57,11 @@
             justify-content: center;
         }
         
-        h1 i {
-            margin-right: 15px;
-        }
-        
+    h1 i {
+    color: var(--primary);
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
         .subtitle {
             font-size: 1rem;
             opacity: 0.9;
@@ -184,6 +185,24 @@
         .copy-btn:hover {
             background-color: white;
         }
+        .clear-btn {
+    background-color: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+    background-color: var(--secondary);
+    color: white;
+    box-shadow: 0 0 8px rgba(230, 178, 186, 0.4);
+}
+
         
         .suggestions {
             margin-top: 30px;
@@ -274,7 +293,7 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-robot"></i> CaptionMuse</h1>
+            <h1><i class="fas fa-sparkles"></i> CaptionMuse</h1>
             <p class="subtitle">Generate smart social media captions in seconds</p>
         </header>
         
@@ -323,18 +342,21 @@
             </div>
             
             <div class="result-container">
-                <label><i class="fas fa-clipboard"></i> Your Caption</label>
+                <label><i class="fas fa-scroll"></i> Your Caption</label>
                 <div class="result" id="result">Your generated caption will appear here...</div>
                 <button class="copy-btn" id="copy-btn">
-                    <i class="fas fa-copy"></i> Copy
+                    <i class="fas fa-clipboard"></i> Copy
                 </button>
-                
+                <!-- NEW Clear Button Below -->
+<div style="margin-top: 10px; text-align: right;">
+  <button class="clear-btn" onclick="clearCaption()">Clear</button>
+</div>
+         
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
                     <p>Generating your perfect caption...</p>
                 </div>
             </div>
-            
             <div class="suggestions">
                 <h2><i class="fas fa-lightbulb"></i> Popular Topics to Share About</h2>
                 <div class="topics-grid" id="topics-grid">
@@ -425,6 +447,12 @@ resultBox.classList.add('fade-in');
                     });
                 }
             });
+
+            function clearCaption() {
+    const output = document.getElementById("captionOutput");
+    output.textContent = "✨ Waiting for your next brilliant prompt...";
+}
+
             
             // Show toast notification
             function showToast() {
@@ -435,51 +463,54 @@ resultBox.classList.add('fade-in');
             }
             
             // Caption generator function
-            function generateCaption(platform, topic, tone, keywords) {
-                const platformNames = {
-                    linkedin: 'LinkedIn',
-                    twitter: 'Twitter',
-                    facebook: 'Facebook'
-                };
-                
-                const toneAdjectives = {
-                    professional: ['strategic', 'impactful', 'valuable', 'essential', 'critical'],
-                    friendly: ['great', 'awesome', 'cool', 'interesting', 'fun'],
-                    inspirational: ['powerful', 'transformative', 'life-changing', 'motivational', 'uplifting']
-                };
-                
-                const connectors = {
-                    professional: ['Therefore', 'Consequently', 'As a result', 'Accordingly', 'Thus'],
-                    friendly: ['So', 'Anyway', 'By the way', 'Also', 'Plus'],
-                    inspirational: ['Remember', 'Always', 'Never forget', 'Keep in mind', 'Most importantly']
-                };
-                
-                const closings = {
-                    professional: ['What are your thoughts?', 'I welcome your perspectives.', 'Let me know what you think.', 'Would love to hear your views.', 'Your thoughts?'],
-                    friendly: ['What do you think?', 'Hit me with your thoughts!', 'Would love to hear from you!', 'Let me know below!', 'Your take?'],
-                    inspirational: ['The floor is yours.', 'Your move.', 'The world needs your voice.', 'Now go make an impact!', 'Your turn to inspire.']
-                };
-                
-                const adj = toneAdjectives[tone][Math.floor(Math.random() * toneAdjectives[tone].length)];
-                const connector = connectors[tone][Math.floor(Math.random() * connectors[tone].length)];
-                const closing = closings[tone][Math.floor(Math.random() * closings[tone].length)];
-                
-                let keywordPhrase = '';
-                if (keywords) {
-                    const keywordList = keywords.split(',').map(k => k.trim());
-                    keywordPhrase = ` ${keywordList.join(', ')}`;
-                }
-                
-                const templates = [
-                    `${topic} is one of the most ${adj} aspects of our work. ${connector}, it's crucial to consider${keywordPhrase}. ${closing}`,
-                    `Just shared my perspective on ${topic.toLowerCase()} – ${adj} insights${keywordPhrase} that can make a real difference. ${closing}`,
-                    `${topic} matters now more than ever. Here's why${keywordPhrase} should be on your radar... ${closing}`,
-                    `Reflecting on ${topic.toLowerCase()} today${keywordPhrase}. What ${adj} lessons have you learned? ${closing}`,
-                    `Breaking down ${topic.toLowerCase()}${keywordPhrase}: why it's ${adj} and how to approach it. ${closing}`
-                ];
-                
-                const selectedTemplate = templates[Math.floor(Math.random() * templates.length)];
-                
+           function generateCaption(platform, topic, tone, keywords, useEmojis = true) {
+    const toneAdjectives = {
+        professional: ['strategic', 'impactful', 'valuable', 'essential', 'critical'],
+        friendly: ['awesome', 'chill', 'fun', 'cool', 'super helpful'],
+        inspirational: ['powerful', 'transformative', 'motivating', 'soul-stirring', 'uplifting']
+    };
+
+    const connectors = {
+        professional: ['That said', 'Let’s dive in', 'From this angle', 'On that note', 'Considering that'],
+        friendly: ['Oh, and by the way', 'Just saying', 'BTW', 'You’ll love this', 'Also worth a shout'],
+        inspirational: ['Let that sink in', 'Keep pushing forward', 'Take this with you', 'One step closer', 'Fuel for the journey']
+    };
+
+    const closings = {
+        professional: ['Curious to hear your take.', 'Let’s keep the convo going.', 'Would love your feedback.', 'What’s your experience?', 'Share your thoughts.'],
+        friendly: ['Thoughts? Drop them below 👇', 'Let’s chat!', 'Your take? 💬', 'Sound off in the comments!', 'Tell me what you think! 😄'],
+        inspirational: ['You’ve got this. 💪', 'Keep rising. ✨', 'Your move. 🔥', 'Now go be amazing.', 'Stay inspired! 🌈']
+    };
+
+    const emojis = {
+        professional: '💼',
+        friendly: '😄',
+        inspirational: '🔥'
+    };
+
+    const adj = toneAdjectives[tone][Math.floor(Math.random() * toneAdjectives[tone].length)];
+    const connector = connectors[tone][Math.floor(Math.random() * connectors[tone].length)];
+    const closing = closings[tone][Math.floor(Math.random() * closings[tone].length)];
+    const emoji = useEmojis ? emojis[tone] : '';
+
+    let keywordPhrase = '';
+    if (keywords) {
+        const keywordList = keywords.split(',').map(k => k.trim());
+        keywordPhrase = `— touching on ${keywordList.join(', ')}`;
+    }
+
+    const templates = [
+        `${emoji} Thinking about ${topic.toLowerCase()} lately. It’s a really ${adj} area to explore ${keywordPhrase}. ${connector}. ${closing}`,
+        `Let’s talk ${topic.toLowerCase()} — it’s more ${adj} than most people realize ${keywordPhrase}. ${closing}`,
+        `${emoji} Ever noticed how ${topic.toLowerCase()} shapes our work? It’s seriously ${adj} ${keywordPhrase}. ${connector} ${closing}`,
+        `${topic} isn't just another buzzword. It’s a ${adj} piece of the puzzle ${keywordPhrase}. ${closing}`,
+        `Been reflecting on ${topic.toLowerCase()} lately. So many ${adj} angles to it ${keywordPhrase}. ${closing}`
+    ];
+
+    const selectedTemplate = templates[Math.floor(Math.random() * templates.length)];
+    return selectedTemplate;
+}
+
                 // Platform-specific adjustments
                 let finalCaption = selectedTemplate;
                 if (platform === 'twitter') {
