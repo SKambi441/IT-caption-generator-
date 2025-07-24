@@ -412,8 +412,50 @@ resultBox.classList.remove('fade-in'); // Reset animation
 void resultBox.offsetWidth; // Reflow hack to restart animation
 resultBox.classList.add('fade-in');
 
+                  // Generate caption
+            generateBtn.addEventListener('click', function() {
+                const platform = document.getElementById('platform').value;
+                const topic = document.getElementById('topic').value.trim();
+                const tone = document.querySelector('input[name="tone"]:checked').value;
+                const keywords = document.getElementById('keywords').value.trim();
+                
+                if (!topic) {
+                    alert('Please enter what your post is about');
+                    return;
+                }
+                
+                // Show loading
+                loadingDiv.style.display = 'block';
+                resultDiv.style.display = 'none';
+                
+                // Simulate API call with timeout
+                setTimeout(() => {
+                    const caption = generateCaption(platform, topic, tone, keywords);
+                    resultDiv.textContent = caption;
+                    loadingDiv.style.display = 'none';
+                    resultDiv.style.display = 'block';
+                }, 1000);
+            });
             
-            // Generate caption
+            // Copy to clipboard
+            copyBtn.addEventListener('click', function() {
+                const text = resultDiv.textContent;
+                if (text && !text.includes('Your generated caption will appear here')) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast();
+                    });
+                }
+            });
+            
+            // Show toast notification
+            function showToast() {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+           
             // Caption generator function
             function generateCaption(platform, topic, tone, keywords) {
                 const platformNames = {
